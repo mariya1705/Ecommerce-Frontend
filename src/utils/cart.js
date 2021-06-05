@@ -21,10 +21,15 @@ export const addToCart = (product, qty = 1) => {
   )
   if (indexOfProduct !== -1) {
     //update the cart qty
-    cart[indexOfProduct].qty += qty
+    cart[indexOfProduct].qty += parseInt(qty)
+
+    if (cart[indexOfProduct].qty === 0) {
+      //remove the product from the cart
+      cart.splice(indexOfProduct, 1)
+    }
   } else {
     //set the qty
-    product.qty = 1
+    product.qty = parseInt(qty)
 
     //push the product
     cart.push(product)

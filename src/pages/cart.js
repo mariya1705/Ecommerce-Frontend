@@ -1,12 +1,14 @@
-import React from "react"
+import React, { useState, useCallback } from "react"
 import Layout from "../components/layout"
-import { getCart } from "../utils/cart"
+import { getCart, addToCart } from "../utils/cart"
 import Seo from "../components/seo"
 import { GatsbyImage } from "gatsby-plugin-image"
 import { formatPrice } from "../utils/format"
 
-const cart = () => {
+const Cart = () => {
   const cart = getCart()
+  const [, updateState] = useState()
+  const forceUpdate = useCallback(() => updateState({}), [])
   return (
     <Layout>
       <Seo title="Cart" />
@@ -37,7 +39,25 @@ const cart = () => {
                 </span>
               </td>
               <td>{formatPrice(product.price_in_cent)}</td>
-              <td style={{ textAlign: "center" }}>{product.qty}</td>
+              <td style={{ textAlign: "center" }}>
+                <span
+                  onClick={() => {
+                    addToCart(product, -1)
+                    forceUpdate()
+                  }}
+                >
+                  -
+                </span>
+                {product.qty}
+                <span
+                  onClick={() => {
+                    addToCart(product, +1)
+                    forceUpdate()
+                  }}
+                >
+                  +
+                </span>
+              </td>
             </tr>
           ))}
         </tbody>
@@ -46,4 +66,4 @@ const cart = () => {
   )
 }
 
-export default cart
+export default Cart
