@@ -1,15 +1,19 @@
-import React, { useState } from "react"
-import Layout from "../components/layout"
+import React, { useState, useContext } from "react"
+
 import { graphql } from "gatsby"
 import { GatsbyImage } from "gatsby-plugin-image"
+
+import { CartContext } from "../context/CartContext"
+
+import Layout from "../components/layout"
+
 import { formatPrice } from "../utils/format"
-import { addToCart } from "../utils/cart"
 
 const ProductTemplate = ({ data }) => {
   const [qty, setQty] = useState(1)
+  const { addToCart } = useContext(CartContext)
 
-  console.log(data)
-
+  console.log("ProductTemplate.render data", data)
   return (
     <Layout>
       <GatsbyImage
@@ -17,7 +21,7 @@ const ProductTemplate = ({ data }) => {
           data.strapiProduct.thumbnail.localFile.childImageSharp.gatsbyImageData
         }
       />
-      <h1>{data.strapiProduct.name}</h1>
+      <h2>{data.strapiProduct.name}</h2>
       <p>{data.strapiProduct.description}</p>
       <p>Price: {formatPrice(data.strapiProduct.price_in_cent)}</p>
       <input
@@ -38,12 +42,12 @@ const ProductTemplate = ({ data }) => {
 export default ProductTemplate
 
 export const query = graphql`
-  query MyQuery($id: String!) {
+  query ProductTemplateQuery($id: String!) {
     strapiProduct(id: { eq: $id }) {
-      name
-      description
-      price_in_cent
       strapiId
+      name
+      price_in_cent
+      description
       thumbnail {
         localFile {
           childImageSharp {

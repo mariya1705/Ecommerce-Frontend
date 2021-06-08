@@ -3,10 +3,9 @@ export const FREE_SHIPPING_THRESHOLD =
   process.env.FREE_SHIPPING_THRESHOLD || 10000
 export const SHIPPING_RATE = process.env.SHIPPING_RATE || 500
 
-export const setCart = cart => {
+export const saveCart = cart => {
   localStorage.setItem("cart", JSON.stringify(cart))
 }
-
 export const getCart = () => {
   try {
     const cart = JSON.parse(localStorage.getItem("cart"))
@@ -14,32 +13,8 @@ export const getCart = () => {
       return cart
     }
   } catch (err) {}
+
   return []
-}
-
-export const addToCart = (product, qty = 1) => {
-  const cart = getCart()
-
-  //if the product is already there
-  const indexOfProduct = cart.findIndex(
-    alreadyInCart => alreadyInCart.strapiId === product.strapiId
-  )
-  if (indexOfProduct !== -1) {
-    //update the cart qty
-    cart[indexOfProduct].qty += parseInt(qty)
-
-    if (cart[indexOfProduct].qty === 0) {
-      //remove the product from the cart
-      cart.splice(indexOfProduct, 1)
-    }
-  } else {
-    //set the qty
-    product.qty = parseInt(qty)
-
-    //push the product
-    cart.push(product)
-  }
-  setCart(cart)
 }
 
 export const cartSubtotal = cart => {
